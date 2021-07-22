@@ -1,5 +1,8 @@
 <?php
 
+// Définit la classe Brand comme dépendance de ce fichier
+require_once './models/Brand.php';
+
 /**
  * Réprésente un processeur
  */
@@ -35,6 +38,41 @@ class Cpu
      * @var integer
      */
     private int $cores;
+
+    /**
+     * Récupère tous les processeurs en base de données
+     *
+     * @return Cpu[]
+     */
+    static public function findAll(): array
+    {
+        // Configure la connexion à la base de données
+        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        // Envoie une requête dans le serveur de base de données
+        $statement = $databaseHandler->query('SELECT
+            `cpus`.*,
+            `brands`.`name` as `brand_name`,
+            `brands`.`country` as `brand_country`
+            FROM `cpus`
+            JOIN `brands` ON `cpus`.`brand_id` = `brands`.`id`
+        ');
+        // Récupère tous les résultats de la requête
+        foreach ($statement->fetchAll() as $cpuData) {
+            $cpus []= new Cpu(
+                $cpuData['id'],
+                $cpuData['name'],
+                $cpuData['price'],
+                new Brand(
+                    $cpuData['brand_id'],
+                    $cpuData['brand_name'],
+                    $cpuData['brand_country']
+                ),
+                $cpuData['clock'],
+                $cpuData['cores']
+            );
+        }
+        return $cpus;
+    }
 
     /**
      * Crée un nouveau composant

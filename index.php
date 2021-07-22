@@ -1,4 +1,13 @@
-<?php require_once 'data/config.php'; ?>
+<?php
+
+require_once './models/Cpu.php';
+require_once './models/Gpu.php';
+
+
+
+require_once 'data/config.php';
+
+?>
 
 <?php
 
@@ -37,6 +46,16 @@ if (isset($_GET['ram'])) {
 
 <?php include './templates/header.php' ?>
 
+
+
+
+<?php
+
+// Récupère tous les processeurs en base de données
+$cpus = Cpu::findAll();
+
+?>
+
 <div class="container">
     <img src="images/Headerbild-pc-gamer-main.jpg" class="img-fluid mb-4" alt="PC gamer" />
     
@@ -59,7 +78,7 @@ if (isset($_GET['ram'])) {
             <label for="cpu">Processeur</label>
             <select name="cpu" class="form-control">
                 <?php foreach ($cpus as $index => $cpu): ?>
-                <option value="<?= $cpu['id'] ?>" <?php if ($cpuIndex === $cpu['id']) { echo 'selected'; } ?>><?= $cpu['name'] ?></option>
+                <option value="<?= $cpu->getId() ?>" <?php if (intval($cpuIndex) === $cpu->getId()) { echo 'selected'; } ?>><?= $cpu->getName() ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
