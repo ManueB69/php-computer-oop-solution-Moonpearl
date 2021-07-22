@@ -28,7 +28,7 @@
                             </div>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <?php foreach ($cpus as $cpu): ?>
-                                <li><a class="dropdown-item" href="/component.php"><?= $cpu['name'] ?></a></li>
+                                <li><a class="dropdown-item" href="/component.php?type=cpu&id=<?= $cpu['id'] ?>"><?= $cpu['name'] ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         </li>
