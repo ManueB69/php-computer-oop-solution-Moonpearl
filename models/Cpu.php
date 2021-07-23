@@ -1,7 +1,8 @@
 <?php
 
-// Définit la classe Brand comme dépendance de ce fichier
+// Définit la classe Brand  et Bdd comme dépendance de ce fichier
 require_once './models/Brand.php';
+require_once './datas/Bdd.php';
 
 /**
  * Réprésente un processeur
@@ -47,11 +48,12 @@ class Cpu
     static public function findAll(): array
     {
         // Configure la connexion à la base de données
-        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        //
+        //$databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
         // Envoie une requête dans le serveur de base de données
-        $statement = $databaseHandler->query('SELECT * FROM `cpus`');
+        // $statement = Bdd::connexionBdd()->query('SELECT * FROM `cpus`');
         // Récupère tous les résultats de la requête
-        foreach ($statement->fetchAll() as $cpuData) {
+        foreach (Bdd::getTableAll('cpus') as $cpuData) {
             $cpus []= new Cpu(
                 $cpuData['id'],
                 $cpuData['name'],
@@ -72,11 +74,13 @@ class Cpu
      */
     static public function findById(int $id)
     {
-        // Configure la connexion à la base de données
-        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
-        $statement = $databaseHandler->prepare('SELECT * FROM `cpus` WHERE `id` = :id');
-        $statement->execute([ ':id' => $id ]);
-        $cpuData = $statement->fetch();
+        // // Configure la connexion à la base de données
+        // $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        // $statement = $databaseHandler->prepare('SELECT * FROM `cpus` WHERE `id` = :id');
+        // $statement->execute([ ':id' => $id ]);
+        // $cpuData = $statement->fetch();
+        
+        $cpuData = Bdd::getTableById('cpus', $id);
         if ($cpuData === false) {
             return null;
         }

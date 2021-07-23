@@ -1,3 +1,4 @@
+
 <?php
 
 $errorMessages = [
@@ -34,6 +35,8 @@ if (isset($_GET['ram'])) {
 ?>
 
 <?php include './templates/header.php' ?>
+
+
 
 <div class="container">
     <img src="images/Headerbild-pc-gamer-main.jpg" class="img-fluid mb-4" alt="PC gamer" />

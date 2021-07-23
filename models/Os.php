@@ -1,5 +1,9 @@
 <?php
 
+// Définit la classe Brand et Bdd comme dépendance de ce fichier
+require_once './models/Brand.php';
+require_once __DIR__ . '/../datas/Bdd.php';
+
 /**
  * Réprésente un systéme d'exploitation
  */
@@ -33,12 +37,7 @@ class Os
      */
     static public function findAll(): array
     {
-        // Configure la connexion à la base de données
-        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
-        // Envoie une requête dans le serveur de base de données
-        $statement = $databaseHandler->query('SELECT * FROM `os`');
-        // Récupère tous les résultats de la requête
-        foreach ($statement->fetchAll() as $osData) {
+       foreach (Bdd::getTableAll('os') as $osData) {
             $oss []= new Os(
                 $osData['id'],
                 $osData['name'],

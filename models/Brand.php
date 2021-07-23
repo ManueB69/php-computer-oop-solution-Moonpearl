@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../datas/Bdd.php';
 
 /**
  * Représente la marque d'un composant
@@ -30,11 +31,13 @@ class Brand
     static public function findById(int $id): ?Brand
     {
         // Configure la connexion à la base de données
-        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        // $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
         // Envoie une requête dans le serveur de base de données
-        $statement = $databaseHandler->prepare('SELECT * FROM `brands` WHERE `id` = :id');
-        $statement->execute([ ':id' => $id ]);
-        $brandData = $statement->fetch();
+        // $statement = $databaseHandler->prepare('SELECT * FROM `brands` WHERE `id` = :id');
+        // $statement->execute([ ':id' => $id ]);
+
+        $brandData = Bdd::getTableById('brands', $id);
+      
         if ($brandData === false) {
             return null;
         }

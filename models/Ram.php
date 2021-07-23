@@ -1,5 +1,9 @@
 <?php
 
+// Définit la classe Brand et Bdd comme dépendance de ce fichier
+require_once './models/Brand.php';
+require_once __DIR__ . '/../datas/Bdd.php';
+
 /**
  * Réprésente uné mémoire vive
  */
@@ -42,13 +46,8 @@ class Ram
      * @return Ram[]
      */
     static public function findAll(): array
-    {
-        // Configure la connexion à la base de données
-        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
-        // Envoie une requête dans le serveur de base de données
-        $statement = $databaseHandler->query('SELECT * FROM `rams`');
-        // Récupère tous les résultats de la requête
-        foreach ($statement->fetchAll() as $ramData) {
+    { 
+        foreach (Bdd::getTableAll('rams') as $ramData) {
             $rams []= new Ram(
                 $ramData['id'],
                 $ramData['name'],

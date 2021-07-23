@@ -1,7 +1,8 @@
 <?php
 
-// Définit la classe Brand comme dépendance de ce fichier
+// Définit la classe Brand et Bdd comme dépendance de ce fichier
 require_once './models/Brand.php';
+require_once __DIR__ . '/../datas/Bdd.php';
 
 /**
  * Réprésente une carte graphique
@@ -42,11 +43,12 @@ class Gpu
     static public function findAll(): array
     {
         // Configure la connexion à la base de données
-        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
-        // Envoie une requête dans le serveur de base de données
-        $statement = $databaseHandler->query('SELECT * FROM `gpus`');
+        // $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        // // Envoie une requête dans le serveur de base de données
+        // $statement = $databaseHandler->query('SELECT * FROM `gpus`');
         // Récupère tous les résultats de la requête
-        foreach ($statement->fetchAll() as $gpuData) {
+        
+        foreach (Bdd::getTableAll('gpus') as $gpuData) {
             $gpus []= new Gpu(
                 $gpuData['id'],
                 $gpuData['name'],
