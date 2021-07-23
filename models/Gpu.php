@@ -1,5 +1,8 @@
 <?php
 
+// Définit la classe Brand comme dépendance de ce fichier
+require_once './models/Brand.php';
+
 /**
  * Réprésente une carte graphique
  */
@@ -21,10 +24,10 @@ class Gpu
      */
     private float $price;
     /**
-     * Marque du composant
-     * @var Brand|null
+     * Identifiant en base de données de la marque du composant
+     * @var integer|null
      */
-    private ?Brand $brand;
+    private ?int $brandId;
     /**
      * Quantité de mémoire
      * @var integer
@@ -32,25 +35,49 @@ class Gpu
     private int $ram;
 
     /**
+     * Récupère tous les cartes graphiques en base de données
+     *
+     * @return Gpu[]
+     */
+    static public function findAll(): array
+    {
+        // Configure la connexion à la base de données
+        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        // Envoie une requête dans le serveur de base de données
+        $statement = $databaseHandler->query('SELECT * FROM `gpus`');
+        // Récupère tous les résultats de la requête
+        foreach ($statement->fetchAll() as $gpuData) {
+            $gpus []= new Gpu(
+                $gpuData['id'],
+                $gpuData['name'],
+                $gpuData['price'],
+                $gpuData['brand_id'],
+                $gpuData['ram']
+            );
+        }
+        return $gpus;
+    }
+
+    /**
      * Crée un nouveau composant
      *
      * @param integer|null $id Identifiant en base de données
      * @param string $name Nom du composant
      * @param float $price Prix du composant
-     * @param Brand|null $brand Marque du composant
+     * @param integer|null $brand Identifiant en base de données de la marque du composant
      * @param integer $ram Quantité de mémoire
      */
     public function __construct(
         ?int $id = null,
         string $name = '',
         float $price = 0,
-        ?Brand $brand = null,
+        ?int $brandId = null,
         int $ram = 0
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
-        $this->brand = $brand;
+        $this->brandId = $brandId;
         $this->ram = $ram;
     }
 
@@ -91,7 +118,7 @@ class Gpu
      */ 
     public function getBrand(): ?Brand
     {
-        return $this->brand;
+        return Brand::findById($this->brandId);
     }
 
     /**

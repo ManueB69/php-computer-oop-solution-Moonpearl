@@ -21,10 +21,10 @@ class Hdd
      */
     private float $price;
     /**
-     * Marque du composant
-     * @var Brand|null
+     * Identifiant en base de données de la marque du composant
+     * @var integer|null
      */
-    private ?Brand $brand;
+    private ?int $brandId;
     /**
      * Capacité de stockage
      * @var integer
@@ -39,12 +39,37 @@ class Hdd
     private int $type;
 
     /**
+     * Récupère tous les périphériques de stockage en base de données
+     *
+     * @return Hdd[]
+     */
+    static public function findAll(): array
+    {
+        // Configure la connexion à la base de données
+        $databaseHandler = new PDO("mysql:host=localhost;dbname=php-config", 'root', 'root');
+        // Envoie une requête dans le serveur de base de données
+        $statement = $databaseHandler->query('SELECT * FROM `hdds`');
+        // Récupère tous les résultats de la requête
+        foreach ($statement->fetchAll() as $hddData) {
+            $hdds []= new Hdd(
+                $hddData['id'],
+                $hddData['name'],
+                $hddData['price'],
+                $hddData['brand_id'],
+                $hddData['size'],
+                $hddData['type']
+            );
+        }
+        return $hdds;
+    }
+
+    /**
      * Crée un nouveau composant
      *
      * @param integer|null $id Identifiant en base de données
      * @param string $name Nom du composant
      * @param float $price Prix du composant
-     * @param Brand|null $brand Marque du composant
+     * @param integer|null $brand Identifiant en base de données de la marque du composant
      * @param integer $size Capacité de stockage
      * @param integer $type Type de stockage
      */
@@ -52,14 +77,14 @@ class Hdd
         ?int $id = null,
         string $name = '',
         float $price = 0,
-        ?Brand $brand = null,
+        ?int $brandId = null,
         int $size = 0,
         int $type = 0
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
-        $this->brand = $brand;
+        $this->brandId = $brandId;
         $this->size = $size;
         $this->type = $type;
     }
@@ -101,14 +126,14 @@ class Hdd
      */ 
     public function getBrand(): ?Brand
     {
-        return $this->brand;
+        return Brand::findById($this->brandId);
     }
 
     /**
      * Get capacité de stockage
      *
      * @return  integer
-     */ 
+     */
     public function getSize(): int
     {
         return $this->size;

@@ -1,16 +1,5 @@
 <?php
 
-require_once './models/Cpu.php';
-require_once './models/Gpu.php';
-
-
-
-require_once 'data/config.php';
-
-?>
-
-<?php
-
 $errorMessages = [
     'Les paramètres de requête ne doivent pas être vides.',
     'Un paramètre de requête est manquant.',
@@ -46,16 +35,6 @@ if (isset($_GET['ram'])) {
 
 <?php include './templates/header.php' ?>
 
-
-
-
-<?php
-
-// Récupère tous les processeurs en base de données
-$cpus = Cpu::findAll();
-
-?>
-
 <div class="container">
     <img src="images/Headerbild-pc-gamer-main.jpg" class="img-fluid mb-4" alt="PC gamer" />
     
@@ -86,7 +65,7 @@ $cpus = Cpu::findAll();
             <label for="ram">Mémoire vive</label>
             <select name="ram" class="form-control">
                 <?php foreach ($rams as $index => $ram): ?>
-                <option value="<?= $index ?>" <?php if ($ramIndex === $index) { echo 'selected'; } ?>><?= $ram['name'] ?></option>
+                <option value="<?= $ram->getId() ?>" <?php if (intval($ramIndex) === $ram->getId()) { echo 'selected'; } ?>><?= $ram->getName() ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -94,7 +73,7 @@ $cpus = Cpu::findAll();
             <label for="gpu">Carte graphique</label>
             <select name="gpu" class="form-control">
                 <?php foreach ($gpus as $index => $gpu): ?>
-                <option value="<?= $index ?>" <?php if ($gpuIndex === $index) { echo 'selected'; } ?>><?= $gpu['name'] ?></option>
+                <option value="<?= $gpu->getId() ?>" <?php if (intval($gpuIndex) === $gpu->getId()) { echo 'selected'; } ?>><?= $gpu->getName() ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -102,7 +81,7 @@ $cpus = Cpu::findAll();
             <label for="hdd">Stockage</label>
             <select name="hdd" class="form-control">
                 <?php foreach ($hdds as $index => $hdd): ?>
-                <option value="<?= $index ?>" <?php if ($hddIndex === $index) { echo 'selected'; } ?>><?= $hdd['name'] ?></option>
+                <option value="<?= $hdd->getId() ?>" <?php if (intval($hddIndex) === $hdd->getId()) { echo 'selected'; } ?>><?= $hdd->getName() ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -110,7 +89,7 @@ $cpus = Cpu::findAll();
             <label for="os">Système d'exploitation</label>
             <select name="os" class="form-control">
                 <?php foreach ($oss as $index => $os): ?>
-                <option value="<?= $index ?>" <?php if ($osIndex === $index) { echo 'selected'; } ?>><?= $os['name'] ?></option>
+                <option value="<?= $os->getId() ?>" <?php if (intval($osIndex) === $os->getId()) { echo 'selected'; } ?>><?= $os->getName() ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
